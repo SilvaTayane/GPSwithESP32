@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mapa de Localização</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h2>Última Localização</h2>
+
+  <div id="map"></div>
+
+  <script>
+    // Coordenadas vindas do Django
+    var lat = {{ ultima.latitude|default:-15.77972 }};
+    var lng = {{ ultima.longitude|default:-47.92972 }};
+
+    // Cria o mapa centralizado na última localização
+    var map = L.map('map').setView([lat, lng], 13);
+
+    // Camada do OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Marcador da última posição
+    L.marker([lat, lng]).addTo(map)
+      .bindPopup("Última posição recebida<br>(" + lat + ", " + lng + ")")
+      .openPopup();
+  </script>
+</body>
+</html>
